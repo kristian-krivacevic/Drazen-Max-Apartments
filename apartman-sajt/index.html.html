@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="bs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apartman Pejović – Boka Kotorska</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F7F3EE;
+    --sand: #E8DDD0;
+    --terra: #C4714A;
+    --terra-dark: #A05A38;
+    --navy: #1C2B3A;
+    --navy-light: #2E4057;
+    --gold: #D4A853;
+    --text: #2A2018;
+    --text-muted: #7A6E64;
+    --white: #FFFFFF;
+    --disabled: #C8C2BB;
+    --booked: #E8C4C4;
+    --available: #C4E8D4;
+    --selected: var(--terra);
+    --radius: 12px;
+    --shadow: 0 8px 32px rgba(28,43,58,0.12);
+    --shadow-lg: 0 20px 60px rgba(28,43,58,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 72px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--cream);
+    letter-spacing: 0.5px;
+  }
+  .logo span { color: var(--gold); }
+  .header-contact {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--sand);
+    font-size: 14px;
+  }
+  .header-contact a {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, #3D5A73 100%);
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 60% 40%, rgba(196,113,74,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 30% 70%, rgba(212,168,83,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: rgba(196,113,74,0.2);
+    border: 1px solid rgba(196,113,74,0.4);
+    color: var(--gold);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero p {
+    color: rgba(232,221,208,0.8);
+    font-size: 17px;
+    font-weight: 300;
+    max-width: 500px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  /* STATS */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--gold);
+    font-weight: 300;
+    display: block;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: rgba(232,221,208,0.6);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* MAIN LAYOUT */
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* APARTMENT CARD */
+  .apartment-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .apt-image {
+    height: 320px;
+    background: linear-gradient(135deg, #3D5A73 0%, var(--navy) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .apt-image::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: 
+      linear-gradient(135deg, rgba(196,113,74,0.2) 0%, transparent 50%),
+      repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.02) 30px, rgba(255,255,255,0.02) 31px);
+  }
+  .apt-image-placeholder {
+    text-align: center;
+    color: rgba(232,221,208,0.5);
+    position: relative;
+    z-index: 1;
+  }
+  .apt-image-placeholder svg { width: 64px; height: 64px; margin-bottom: 12px; display: block; margin: 0 auto 12px; }
+  .apt-image-placeholder p { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
+  .img-badge {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: var(--terra);
+    color: white;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    z-index: 2;
+  }
+  .apt-body { padding: 32px; }
+  .apt-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+  .apt-location {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 24px;
+  }
+  .apt-location a {
+    color: var(--terra);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .apt-location a:hover { text-decoration: underline; }
+
+  .apt-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .feature {
+    background: var(--cream);
+    border-radius: 10px;
+    padding: 16px 12px;
+    text-align: center;
+  }
+  .feature-icon { font-size: 22px; margin-bottom: 6px; }
+  .feature-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+  .feature-val { font-size: 14px; font-weight: 500; color: var(--text); margin-top: 3px; }
+
+  .price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    background: var(--navy);
+    border-radius: 10px;
+    margin-bottom: 24px;
+  }
+  .price-label { color: var(--sand); font-size: 13px; }
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    color: var(--gold);
+    font-weight: 300;
+  }
+  .price-amount sup { font-size: 16px; }
+  .price-note { color: rgba(232,221,208,0.5); font-size: 12px; }
+
+  /* HOST CARD */
+  .host-card {
+    background: var(--sand);
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .host-avatar {
+    width: 52px; height: 52px;
+    background: var(--navy);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+  .host-name { font-weight: 500; color: var(--navy); font-size: 15px; }
+  .host-title { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .host-phone { font-size: 13px; color: var(--terra); font-weight: 500; margin-top: 4px; }
+
+  /* BOOKING PANEL */
+  .booking-panel {
+    position: sticky;
+    top: 90px;
+  }
+  .booking-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .booking-header {
+    background: var(--navy);
+    padding: 24px 28px;
+  }
+  .booking-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--cream);
+    font-weight: 400;
+    margin-bottom: 4px;
+  }
+  .booking-header p { color: rgba(232,221,208,0.6); font-size: 13px; }
+  .booking-body { padding: 28px; }
+
+  /* CALENDAR */
+  .cal-section { margin-bottom: 24px; }
+  .cal-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .cal-month {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .cal-btn {
+    background: none;
+    border: 1.5px solid var(--sand);
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--navy);
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .cal-btn:hover { background: var(--navy); color: white; border-color: var(--navy); }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+  .cal-dow {
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 6px 0;
+    font-weight: 500;
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 2px solid transparent;
+    font-weight: 400;
+    position: relative;
+  }
+  .cal-day:empty { cursor: default; }
+  .cal-day.past { color: var(--disabled); cursor: not-allowed; }
+  .cal-day.booked {
+    background: #FDE8E8;
+    color: #C04040;
+    cursor: not-allowed;
+    font-weight: 500;
+    text-decoration: line-through;
+    opacity: 0.7;
+  }
+  .cal-day.booked::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #C04040;
+  }
+  .cal-day.available:hover {
+    background: var(--terra);
+    color: white;
+    transform: scale(1.05);
+  }
+  .cal-day.selected {
+    background: var(--terra) !important;
+    color: white !important;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(196,113,74,0.4);
+    transform: scale(1.05);
+  }
+  .cal-day.in-range {
+    background: rgba(196,113,74,0.12);
+    color: var(--terra-dark);
+    border-radius: 0;
+  }
+  .cal-day.range-start { border-radius: 8px 0 0 8px; }
+  .cal-day.range-end { border-radius: 0 8px 8px 0; }
+  .cal-day.today {
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+
+  .cal-legend {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 10px; height: 10px;
+    border-radius: 3px;
+  }
+
+  /* DATE INPUTS */
+  .date-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .date-input-box {
+    border: 1.5px solid var(--sand);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .date-input-box:hover { border-color: var(--terra); }
+  .date-input-box.active { border-color: var(--terra); background: rgba(196,113,74,0.04); }
+  .dib-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 4px; }
+  .dib-value { font-size: 14px; font-weight: 500; color: var(--navy); }
+  .dib-value.placeholder { color: var(--disabled); font-weight: 400; }
+
+  /* NIGHTS SUMMARY */
+  .nights-summary {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .nights-summary.visible { display: flex; }
+  .ns-label { color: var(--sand); font-size: 13px; }
+  .ns-value { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--gold); }
+
+  /* RESERVE BUTTON */
+  .btn-reserve {
+    width: 100%;
+    background: var(--terra);
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .btn-reserve:hover { background: var(--terra-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(196,113,74,0.35); }
+  .btn-reserve:disabled { background: var(--disabled); cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-secondary {
+    width: 100%;
+    background: transparent;
+    color: var(--navy);
+    border: 1.5px solid var(--sand);
+    padding: 14px;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--navy); background: var(--cream); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(28,43,58,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .modal-header {
+    background: var(--navy);
+    padding: 28px 32px 24px;
+    border-radius: 20px 20px 0 0;
+  }
+  .modal-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: var(--cream);
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+  .modal-header p { color: rgba(232,221,208,0.6); font-size: 13px; }
+  .modal-body { padding: 32px; }
+
+  .booking-summary {
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+  }
+  .bs-title {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+  .bs-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--sand);
+    font-size: 14px;
+  }
+  .bs-row:last-child { border-bottom: none; }
+  .bs-row span:first-child { color: var(--text-muted); }
+  .bs-row span:last-child { font-weight: 500; color: var(--navy); }
+  .bs-total .bs-row span:last-child {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--terra);
+  }
+
+  .form-group { margin-bottom: 18px; }
+  .form-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+  .form-input {
+    width: 100%;
+    border: 1.5px solid var(--sand);
+    border-radius: 8px;
+    padding: 13px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--white);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--terra); }
+  textarea.form-input { resize: vertical; min-height: 100px; }
+
+  .contact-highlight {
+    background: linear-gradient(135deg, rgba(196,113,74,0.08), rgba(212,168,83,0.08));
+    border: 1px solid rgba(196,113,74,0.2);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .ch-icon { font-size: 24px; flex-shrink: 0; }
+  .ch-text p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .ch-text strong { color: var(--terra); font-size: 14px; display: block; margin-bottom: 4px; }
+
+  .modal-footer {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    padding-top: 4px;
+  }
+  .btn-cancel {
+    background: transparent;
+    border: 1.5px solid var(--sand);
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .btn-cancel:hover { border-color: var(--text-muted); color: var(--text); }
+  .btn-confirm {
+    background: var(--terra);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-confirm:hover { background: var(--terra-dark); }
+
+  /* SUCCESS */
+  .success-overlay {
+    position: fixed; inset: 0;
+    background: rgba(28,43,58,0.7);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .success-overlay.open { display: flex; }
+  .success-card {
+    background: white;
+    border-radius: 20px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    padding: 48px 40px;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s ease;
+  }
+  .success-icon {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--terra), var(--gold));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 32px;
+  }
+  .success-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px;
+    color: var(--navy);
+    margin-bottom: 12px;
+  }
+  .success-card p { color: var(--text-muted); font-size: 15px; line-height: 1.7; margin-bottom: 8px; }
+  .success-phone { color: var(--terra); font-weight: 600; font-size: 18px; display: block; margin: 16px 0; }
+  .btn-close-success {
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 40px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.2s;
+  }
+  .btn-close-success:hover { background: var(--navy-light); }
+
+  /* RESERVATIONS SECTION */
+  .reservations-section {
+    max-width: 1200px;
+    margin: 0 auto 60px;
+    padding: 0 24px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    color: var(--navy);
+    margin-bottom: 20px;
+    font-weight: 400;
+  }
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .res-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--terra);
+  }
+  .res-name { font-weight: 600; color: var(--navy); font-size: 15px; margin-bottom: 6px; }
+  .res-dates { color: var(--terra); font-size: 13px; font-weight: 500; margin-bottom: 8px; }
+  .res-msg { color: var(--text-muted); font-size: 13px; line-height: 1.5; font-style: italic; }
+  .res-contact { font-size: 12px; color: var(--text-muted); margin-top: 10px; }
+  .no-reservations { color: var(--text-muted); font-size: 14px; padding: 20px 0; }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: var(--sand);
+    text-align: center;
+    padding: 32px 24px;
+    font-size: 13px;
+    opacity: 0.9;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 900px) {
+    .main { grid-template-columns: 1fr; }
+    .booking-panel { position: static; }
+    .stats { gap: 30px; }
+    header { padding: 0 20px; }
+    .hero { padding: 60px 24px 40px; }
+    .apt-features { grid-template-columns: repeat(3, 1fr); }
+    .modal-footer { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Apartman <span>Pejović</span></div>
+  <div class="header-contact">
+    <span>📞 <a href="tel:067900020">067 900 020</a></span>
+    <span style="opacity:0.4">|</span>
+    <span>Drazen Pejović</span>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">⚓ Boka Kotorska, Crna Gora</div>
+  <h1>Vaš odmor na <em>Jadranu</em></h1>
+  <p>Luksuzni apartman uz more – idealan za porodični odmor ili romansu</p>
+  <div class="stats">
+    <div class="stat"><span class="stat-num">2</span><div class="stat-label">Sobe</div></div>
+    <div class="stat"><span class="stat-num">4</span><div class="stat-label">Osobe</div></div>
+    <div class="stat"><span class="stat-num">★ 5.0</span><div class="stat-label">Ocjena</div></div>
+    <div class="stat"><span class="stat-num">60<sup>€</sup></span><div class="stat-label">Po noći</div></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- LEFT: APARTMENT INFO -->
+  <div>
+    <div class="apartment-card">
+      <div class="apt-image">
+        <div class="img-badge">📸 Slike dolaze uskoro</div>
+        <div class="apt-image-placeholder">
+          <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="12" width="56" height="40" rx="4" stroke="rgba(232,221,208,0.4)" stroke-width="2"/>
+            <circle cx="20" cy="28" r="6" stroke="rgba(232,221,208,0.4)" stroke-width="2"/>
+            <path d="M4 42 L18 30 L28 40 L40 26 L60 44" stroke="rgba(232,221,208,0.4)" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          <p>Fotografije apartmana</p>
+        </div>
+      </div>
+      <div class="apt-body">
+        <div class="apt-title">Apartman Pejović</div>
+        <div class="apt-location">
+          📍 <a href="https://maps.app.goo.gl/xXL91eEiPN7QYrCV7" target="_blank">Pogledaj na Google Maps →</a>
+        </div>
+
+        <div class="apt-features">
+          <div class="feature">
+            <div class="feature-icon">🛏️</div>
+            <div class="feature-label">Spavaće sobe</div>
+            <div class="feature-val">2</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🛁</div>
+            <div class="feature-label">Kupatila</div>
+            <div class="feature-val">1</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">👥</div>
+            <div class="feature-label">Kapacitet</div>
+            <div class="feature-val">4 osobe</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">📶</div>
+            <div class="feature-label">WiFi</div>
+            <div class="feature-val">Besplatan</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">🅿️</div>
+            <div class="feature-label">Parking</div>
+            <div class="feature-val">Uključen</div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">❄️</div>
+            <div class="feature-label">Klima</div>
+            <div class="feature-val">Da</div>
+          </div>
+        </div>
+
+        <div class="price-row">
+          <div>
+            <div class="price-label">Cijena po noći</div>
+            <div class="price-note">uključen PDV i naknade</div>
+          </div>
+          <div class="price-amount"><sup>€</sup>60</div>
+        </div>
+
+        <div class="host-card">
+          <div class="host-avatar">D</div>
+          <div>
+            <div class="host-name">Drazen Pejović</div>
+            <div class="host-title">Vlasnik apartmana</div>
+            <div class="host-phone">📞 067 900 020</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: BOOKING PANEL -->
+  <div class="booking-panel">
+    <div class="booking-card">
+      <div class="booking-header">
+        <h3>Rezervišite odmor</h3>
+        <p>Odaberite datum dolaska i odlaska</p>
+      </div>
+      <div class="booking-body">
+        <div class="cal-section">
+          <div class="cal-label">Odaberite termine</div>
+          <div class="cal-nav">
+            <button class="cal-btn" onclick="changeMonth(-1)">←</button>
+            <div class="cal-month" id="calMonth"></div>
+            <button class="cal-btn" onclick="changeMonth(1)">→</button>
+          </div>
+          <div class="cal-grid" id="calGrid"></div>
+          <div class="cal-legend">
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#C4E8D4;border:1px solid #7AC49A"></div>
+              Slobodno
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:#FDE8E8;border:1px solid #C04040"></div>
+              Zauzeto
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot" style="background:var(--terra)"></div>
+              Odabrano
+            </div>
+          </div>
+        </div>
+
+        <div class="date-inputs">
+          <div class="date-input-box" id="dibCheck">
+            <div class="dib-label">Check-in</div>
+            <div class="dib-value placeholder" id="dibCheckVal">Odaberite</div>
+          </div>
+          <div class="date-input-box" id="dibOut">
+            <div class="dib-label">Check-out</div>
+            <div class="dib-value placeholder" id="dibOutVal">Odaberite</div>
+          </div>
+        </div>
+
+        <div class="nights-summary" id="nightsSummary">
+          <div>
+            <div class="ns-label">Ukupno noći</div>
+          </div>
+          <div>
+            <span class="ns-value" id="nightsCount">0</span>
+            <span style="color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:18px"> × €60 = </span>
+            <span class="ns-value" id="totalPrice">€0</span>
+          </div>
+        </div>
+
+        <button class="btn-reserve" id="btnReserve" onclick="openModal()" disabled>
+          Nastavi rezervaciju →
+        </button>
+        <button class="btn-secondary" onclick="clearSelection()">Poništi odabir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESERVATIONS SECTION -->
+<div class="reservations-section">
+  <div class="section-title">Nadolazeće rezervacije</div>
+  <div class="res-grid" id="resList">
+    <div class="no-reservations">Još uvijek nema rezervacija.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Apartman Pejović · <a href="https://maps.app.goo.gl/xXL91eEiPN7QYrCV7" target="_blank">Pogledaj lokaciju</a> · <a href="tel:067900020">067 900 020</a></p>
+  <p style="margin-top:8px;opacity:0.5;font-size:11px">Dizajnirano za Dražena Pejovića</p>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Detalji rezervacije</h2>
+      <p>Popunite vaše podatke i pošaljite poruku vlasniku</p>
+    </div>
+    <div class="modal-body">
+      <div class="booking-summary" id="modalSummary"></div>
+
+      <div class="contact-highlight">
+        <div class="ch-icon">📞</div>
+        <div class="ch-text">
+          <strong>Kontakt vlasnika</strong>
+          <p>Drazen Pejović – <b>067 900 020</b><br>Nakon slanja, vlasnik će vas kontaktirati radi potvrde.</p>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Vaše ime i prezime *</label>
+        <input class="form-input" id="guestName" type="text" placeholder="npr. Marko Nikolić">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefon *</label>
+        <input class="form-input" id="guestPhone" type="tel" placeholder="npr. 069 123 456">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email (opcionalno)</label>
+        <input class="form-input" id="guestEmail" type="email" placeholder="npr. marko@email.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Poruka vlasniku</label>
+        <textarea class="form-input" id="guestMsg" placeholder="Unesite broj gostiju, posebne zahtjeve, pitanja..."></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" onclick="closeModal()">Odustani</button>
+        <button class="btn-confirm" onclick="confirmReservation()">✓ Potvrdi rezervaciju</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon">✓</div>
+    <h2>Rezervacija primljena!</h2>
+    <p>Vaša rezervacija je uspješno evidentirana.</p>
+    <p>Vlasnik će vas kontaktirati na <b id="successPhone"></b></p>
+    <span class="success-phone">📞 067 900 020</span>
+    <p style="font-size:13px">Drazen Pejović – dostupan svakodnevno</p>
+    <button class="btn-close-success" onclick="closeSuccess()">Zatvori</button>
+  </div>
+</div>
+
+<script>
+  // ── STATE ──────────────────────────────────────────────
+  const PRICE_PER_NIGHT = 60;
+  const STORAGE_KEY = 'apartman_pejovic_bookings';
+
+  let currentYear, currentMonth, checkIn = null, checkOut = null;
+  let selectingEnd = false;
+
+  const MONTH_NAMES = ['Januar','Februar','Mart','April','Maj','Juni','Juli','August','Septembar','Oktobar','Novembar','Decembar'];
+  const DOW = ['Po','Ut','Sr','Čet','Pe','Su','Ne'];
+
+  // ── STORAGE ────────────────────────────────────────────
+  function loadBookings() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+    catch { return []; }
+  }
+  function saveBookings(b) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(b));
+  }
+
+  // ── DATE HELPERS ───────────────────────────────────────
+  function dateStr(d) {
+    // YYYY-MM-DD
+    return d.toISOString().split('T')[0];
+  }
+  function parseDate(s) {
+    const [y,m,d] = s.split('-').map(Number);
+    return new Date(y, m-1, d);
+  }
+  function formatDisplay(s) {
+    const d = parseDate(s);
+    return `${d.getDate()}. ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
+  }
+  function bookedDates() {
+    const bookings = loadBookings();
+    const set = new Set();
+    bookings.forEach(b => {
+      let d = parseDate(b.checkIn);
+      const end = parseDate(b.checkOut);
+      while (d < end) {
+        set.add(dateStr(d));
+        d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+      }
+    });
+    return set;
+  }
+  function daysBetween(a, b) {
+    return Math.round((parseDate(b) - parseDate(a)) / 86400000);
+  }
+
+  // ── CALENDAR RENDER ────────────────────────────────────
+  function renderCalendar() {
+    const today = new Date();
+    const todayStr = dateStr(today);
+    const booked = bookedDates();
+
+    document.getElementById('calMonth').textContent = MONTH_NAMES[currentMonth] + ' ' + currentYear;
+
+    const firstDay = new Date(currentYear, currentMonth, 1);
+    let startDow = firstDay.getDay(); // 0=Sun
+    // Convert to Mon-first
+    startDow = (startDow + 6) % 7;
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+    let html = '';
+    // Day headers
+    DOW.forEach(d => { html += `<div class="cal-dow">${d}</div>`; });
+
+    // Empty cells
+    for (let i = 0; i < startDow; i++) html += '<div class="cal-day"></div>';
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const ds = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      let cls = 'cal-day';
+      const isPast = ds < todayStr;
+      const isBooked = booked.has(ds);
+      const isToday = ds === todayStr;
+
+      if (isPast) cls += ' past';
+      else if (isBooked) cls += ' booked';
+      else cls += ' available';
+      if (isToday) cls += ' today';
+
+      // Range highlighting
+      if (checkIn && checkOut) {
+        if (ds === checkIn || ds === checkOut) cls += ' selected';
+        else if (ds > checkIn && ds < checkOut) cls += ' in-range';
+        if (ds === checkIn) cls += ' range-start';
+        if (ds === checkOut) cls += ' range-end';
+      } else if (checkIn && ds === checkIn) {
+        cls += ' selected';
+      }
+
+      const clickable = !isPast && !isBooked;
+      html += `<div class="${cls}"${clickable ? ` onclick="dayClick('${ds}')"` : ''}>${d}</div>`;
+    }
+
+    document.getElementById('calGrid').innerHTML = html;
+  }
+
+  function dayClick(ds) {
+    if (!checkIn || (checkIn && checkOut)) {
+      // Start new selection
+      checkIn = ds;
+      checkOut = null;
+      selectingEnd = true;
+    } else if (selectingEnd) {
+      if (ds <= checkIn) {
+        checkIn = ds;
+        checkOut = null;
+      } else {
+        // Check no booked dates in range
+        const booked = bookedDates();
+        let valid = true;
+        let d = parseDate(checkIn);
+        const end = parseDate(ds);
+        while (d < end) {
+          if (booked.has(dateStr(d))) { valid = false; break; }
+          d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+        }
+        if (!valid) {
+          alert('U odabranom periodu postoje zauzeti datumi. Molimo odaberite drugi termin.');
+          checkIn = null; checkOut = null;
+        } else {
+          checkOut = ds;
+          selectingEnd = false;
+        }
+      }
+    }
+    updateDateInputs();
+    renderCalendar();
+  }
+
+  function updateDateInputs() {
+    const ci = document.getElementById('dibCheckVal');
+    const co = document.getElementById('dibOutVal');
+    const ns = document.getElementById('nightsSummary');
+    const btn = document.getElementById('btnReserve');
+
+    if (checkIn) {
+      ci.textContent = formatDisplay(checkIn);
+      ci.classList.remove('placeholder');
+    } else {
+      ci.textContent = 'Odaberite';
+      ci.classList.add('placeholder');
+    }
+    if (checkOut) {
+      co.textContent = formatDisplay(checkOut);
+      co.classList.remove('placeholder');
+      const nights = daysBetween(checkIn, checkOut);
+      document.getElementById('nightsCount').textContent = nights;
+      document.getElementById('totalPrice').textContent = '€' + (nights * PRICE_PER_NIGHT);
+      ns.classList.add('visible');
+      btn.disabled = false;
+    } else {
+      co.textContent = 'Odaberite';
+      co.classList.add('placeholder');
+      ns.classList.remove('visible');
+      btn.disabled = true;
+    }
+  }
+
+  function clearSelection() {
+    checkIn = null; checkOut = null; selectingEnd = false;
+    updateDateInputs();
+    renderCalendar();
+  }
+
+  function changeMonth(dir) {
+    currentMonth += dir;
+    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+    renderCalendar();
+  }
+
+  // ── MODAL ──────────────────────────────────────────────
+  function openModal() {
+    if (!checkIn || !checkOut) return;
+    const nights = daysBetween(checkIn, checkOut);
+    const total = nights * PRICE_PER_NIGHT;
+    document.getElementById('modalSummary').innerHTML = `
+      <div class="bs-title">Pregled rezervacije</div>
+      <div class="bs-row"><span>Check-in</span><span>${formatDisplay(checkIn)}</span></div>
+      <div class="bs-row"><span>Check-out</span><span>${formatDisplay(checkOut)}</span></div>
+      <div class="bs-row"><span>Broj noći</span><span>${nights}</span></div>
+      <div class="bs-row"><span>Cijena po noći</span><span>€${PRICE_PER_NIGHT}</span></div>
+      <div class="bs-row bs-total"><span><b>Ukupno</b></span><span>€${total}</span></div>
+    `;
+    document.getElementById('modalOverlay').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+  }
+
+  function confirmReservation() {
+    const name = document.getElementById('guestName').value.trim();
+    const phone = document.getElementById('guestPhone').value.trim();
+    const email = document.getElementById('guestEmail').value.trim();
+    const msg = document.getElementById('guestMsg').value.trim();
+
+    if (!name || !phone) {
+      alert('Molimo unesite ime i telefon.');
+      return;
+    }
+
+    const nights = daysBetween(checkIn, checkOut);
+    const booking = {
+      id: Date.now(),
+      checkIn, checkOut, nights,
+      total: nights * PRICE_PER_NIGHT,
+      name, phone, email, msg,
+      createdAt: new Date().toISOString()
+    };
+
+    const bookings = loadBookings();
+    bookings.push(booking);
+    saveBookings(bookings);
+
+    closeModal();
+    document.getElementById('successPhone').textContent = phone;
+    document.getElementById('successOverlay').classList.add('open');
+
+    // Reset
+    checkIn = null; checkOut = null; selectingEnd = false;
+    updateDateInputs();
+    renderCalendar();
+    renderReservations();
+
+    // Clear form
+    ['guestName','guestPhone','guestEmail','guestMsg'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+  }
+
+  function closeSuccess() {
+    document.getElementById('successOverlay').classList.remove('open');
+  }
+
+  // Close modal on outside click
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // ── RESERVATIONS LIST ──────────────────────────────────
+  function renderReservations() {
+    const bookings = loadBookings();
+    const container = document.getElementById('resList');
+    if (!bookings.length) {
+      container.innerHTML = '<div class="no-reservations">Još uvijek nema rezervacija.</div>';
+      return;
+    }
+    // Sort by check-in
+    const sorted = [...bookings].sort((a,b) => a.checkIn.localeCompare(b.checkIn));
+    container.innerHTML = sorted.map(b => `
+      <div class="res-card">
+        <div class="res-name">👤 ${b.name}</div>
+        <div class="res-dates">📅 ${formatDisplay(b.checkIn)} → ${formatDisplay(b.checkOut)} (${b.nights} noći)</div>
+        ${b.msg ? `<div class="res-msg">"${b.msg}"</div>` : ''}
+        <div class="res-contact">📞 ${b.phone}${b.email ? ' · ' + b.email : ''} · <b>€${b.total}</b></div>
+      </div>
+    `).join('');
+  }
+
+  // ── INIT ───────────────────────────────────────────────
+  function init() {
+    const now = new Date();
+    currentYear = now.getFullYear();
+    currentMonth = now.getMonth();
+    renderCalendar();
+    renderReservations();
+  }
+
+  init();
+</script>
+</body>
+</html>
